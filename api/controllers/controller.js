@@ -17,7 +17,7 @@
 // clear the data of prev_share_data
 
 // api 3
-// transfer the data from curr_share_data to prev_share_data
+// transfer the data from curr_share_data to prev_share_data(after transfer delete the data from curr_share_data)
 
 // api 4
 // clear the data of share_exchange_data and calculate new data based on data saved in curr and prev share_data
@@ -28,6 +28,6 @@
 // - based on that also show the information if the person has either formed new shared ownership or left any shared ownership in which user was a week ago
 
 // api 6
-// calculate the state wise holding and state wise delta
+// calculate the state wise holdings and state wise delta
 // in prev and curr data -> group shares sharing same state and then calculate total shares
 
