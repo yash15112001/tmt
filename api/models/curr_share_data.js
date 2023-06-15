@@ -25,6 +25,16 @@ const CurrShareData = sequelize.define('CurrShareData',{
     share_type: {
         type: Sequelize.ENUM('PHY','NSD','CDS'),
         allowNull: false,
+    },
+    dpid: {
+        type: Sequelize.INTEGER,
+    },
+    holder_fol: {
+        type: Sequelize.INTEGER,
+    },
+    is_considered: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
     }
 },{hooks,tableName});
 

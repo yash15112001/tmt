@@ -17,6 +17,10 @@ const ShareExchangeData = sequelize.define('ShareExchangeData',{
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    share_owners: {
+        type: Sequelize.ARRAY(Sequelize.BIGINT),
+        allowNull: false,
+    },
     curr_share_data_index: {
         allowNull: true,
         type: Sequelize.BIGINT,
@@ -25,7 +29,7 @@ const ShareExchangeData = sequelize.define('ShareExchangeData',{
             key: 'id',
         }
     },
-    pre_share_data_index: {
+    prev_share_data_index: {
         allowNull: true,
         type: Sequelize.BIGINT,
         references: {
@@ -33,10 +37,10 @@ const ShareExchangeData = sequelize.define('ShareExchangeData',{
             key: 'id',
         }
     },
-    hold_minor: {
+    hold_minor_status: {
         type: Sequelize.STRING,
     },
-    share_type: {
+    share_type_status: {
         type: Sequelize.STRING,
     }
 },{hooks,tableName});

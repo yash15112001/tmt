@@ -1,9 +1,9 @@
 const dev_creds = {
-    database: '',
-    username: '',
-    password: '',
-    host: '',
-    dialect: ''    
+  database: 'postgres',
+  username: 'postgres',
+  password: "Bintech",
+  host: 'localhost',
+  dialect: 'postgres'   
 };
 
 module.exports = {
