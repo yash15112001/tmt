@@ -31,3 +31,49 @@
 // calculate the state wise holdings and state wise delta
 // in prev and curr data -> group shares sharing same state and then calculate total shares
 
+const sequelize =  require('sequelize')
+
+const allApis = () => {
+    const upload_excel = async(req,res)=>{
+        try {
+            await populate_new_data(req.file.buffer);
+            res.status(200).json({message:'Data converted and successfully saved in curr_share_data.',success:true});
+        } catch (error) {
+            res.status(500).json({message:"Error while Importing data.",error,success:false})
+        }
+    }; // multer at routes for this api : route.post("path",upload.single('file'),api-path)
+    const populate_new_data = async(req,res)=>{
+        function formatExcelFile(req,res){
+            if(req.files!=null){
+                
+            }
+        }
+    };
+    const clear_old_data = async(req,res)=>{
+
+    };
+    const move_curr_data = async(req,res)=>{
+
+    };
+    const calculate_share_exchange = async(req,res)=>{
+
+    };
+    const user_portfolio = async(req,res)=>{
+
+    };
+    const state_wise_exchage = async(req,res)=>{
+
+    };
+    
+    return {
+        upload_excel,
+        populate_new_data,
+        clear_old_data,
+        move_curr_data,
+        calculate_share_exchange,
+        user_portfolio,
+        state_wise_exchage
+    }
+}
+
+module.exports = allApis
