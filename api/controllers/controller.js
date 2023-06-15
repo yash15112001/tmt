@@ -32,13 +32,14 @@
 // in prev and curr data -> group shares sharing same state and then calculate total shares
 
 const sequelize =  require('sequelize')
+const axios = require('axios')
 
 const xlsx = require('xlsx')
 const User = require('../models/user')
 const CurrShareData = require('../models/curr_share_data')
 const PrevShareData = require('../models/prev_share_data')
-const ShareExchangeData = require('../model/share_exchange_data')
-const Portfolio = require('../model/portfolio')
+const ShareExchangeData = require('../models/share_exchange_data')
+const Portfolio = require('../models/portfolio')
 
 const upload_formalise_and_populate_new_data = async (req,res)=>{
     if(!req.file) res.status(400).json({message:"no file uploaded",success:false})
@@ -81,7 +82,6 @@ const upload_formalise_and_populate_new_data = async (req,res)=>{
 
                         // try {
                         //     const response = await axios.get(`http://api.zippopotam.us/us/${pincode}`);
-
                         //     const { city, state, country } = response.data.places[0];
                         // } catch (error) {
                             
