@@ -40,6 +40,9 @@ const CurrShareData = require('../models/curr_share_data')
 const PrevShareData = require('../models/prev_share_data')
 const ShareExchangeData = require('../models/share_exchange_data')
 const Portfolio = require('../models/portfolio')
+const CityExchangeData = require('../model/city_exchange_data')
+const StateExchangeData = require('../model/state_exchange_data')
+const CountryExchangeData = require('../model/country_exchange_data')
 
 const upload_formalise_and_populate_new_data = async (req,res)=>{
     if(!req.file) res.status(400).json({message:"no file uploaded",success:false})
@@ -385,29 +388,170 @@ const calculate_all_user_portfolio = async(req,res)=>{
     }
 };
 
+const city_wise_exchange = async(req,res)=>{
+    // for every instances of curr week data
+    // check if instance with city exists in city_wise_exchanges
+    // if not create instance with cityname,currweekdata.share_owner.quntity where cityname==currweekdata.share_owner
+    // if exists then just add currweekdata.share_owner.quantity to that instance
+    // do same for prev week data
+    // save delta in same schema difff=prev-curr
 
+    // do same for state and country
 
-const allApis = () => {
+    try {
+        const prevWeekData = await PrevShareData.findAll();
+        const currWeekData = await CurrShareData.findAll();
 
-    // const state_wise_exchage = async(req,res)=>{
+        for(const prevWeek of prevWeekData){
+            const user = prevWeek.share_owners[0]
+            const city = user.city
+            const city_exchange_data_instance = await CityExchangeData.findOne({
+                where: {city},
+            });
+            if(city_exchange_data_instance==null){
+                await CityExchangeData.create({
+                    city_name: city,
+                    prev_week_total: prevWeek.share_quantity,
+                    curr_week_total: 0,
+                    total_delta: -prevWeek.share_quantity
+                })
+            }else{
+                city_exchange_data_instance.prev_week_total += prevWeek.share_quantity
+                city_exchange_data_instance.total_delta -= prevWeek.share_quantity
+                await city_exchange_data_instance.save();
+            }   
+        }
 
-    // };
+        for(const currWeek of currWeekData){
+            const user = currWeek.share_owners[0]
+            const city = user.city
+            const city_exchange_data_instance = await CityExchangeData.findOne({
+                where: {city},
+            });
+            if(city_exchange_data_instance==null){
+                await CityExchangeData.create({
+                    city_name: city,
+                    prev_week_total: 0,
+                    curr_week_total: currWeek.share_quantity,
+                    total_delta: currWeek.share_quantity
+                })
+            }else{
+                city_exchange_data_instance.curr_week_total += currWeek.share_quantity
+                city_exchange_data_instance.total_delta += currWeek.share_quantity
+                await city_exchange_data_instance.save();
+            }   
+        }
 
-    // const city_wise_exchage = async(req,res)=>{
-
-    // };
-
-    // const country_wise_exchage = async(req,res)=>{
-
-    // };
-
-    return {
-
-        // state_wise_exchage,
-        // city_wise_exchage,
-        // country_wise_exchage
+        return res.status(200).json({message:"City Wise share exchange information is calulated successfully.",success:true})
+    } catch (error) {
+        return res.status(500).json({message:error.message,success:false})
     }
-}
+};
+
+const state_wise_exchange = async(req,res)=>{
+
+    try {
+        const prevWeekData = await PrevShareData.findAll();
+        const currWeekData = await CurrShareData.findAll();
+
+        for(const prevWeek of prevWeekData){
+            const user = prevWeek.share_owners[0]
+            const state = user.state
+            const state_exchange_data_instance = await StateExchangeData.findOne({
+                where: {state},
+            });
+            if(state_exchange_data_instance==null){
+                await StateExchangeData.create({
+                    state_name: state,
+                    prev_week_total: prevWeek.share_quantity,
+                    curr_week_total: 0,
+                    total_delta: -prevWeek.share_quantity
+                })
+            }else{
+                state_exchange_data_instance.prev_week_total += prevWeek.share_quantity
+                state_exchange_data_instance.total_delta -= prevWeek.share_quantity
+                await city_exchange_data_instance.save();
+            }   
+        }
+
+        for(const currWeek of currWeekData){
+            const user = currWeek.share_owners[0]
+            const state = user.state
+            const state_exchange_data_instance = await StateExchangeData.findOne({
+                where: {state},
+            });
+            if(state_exchange_data_instance==null){
+                await StateExchangeData.create({
+                    state_name: state,
+                    prev_week_total: 0,
+                    curr_week_total: currWeek.share_quantity,
+                    total_delta: currWeek.share_quantity
+                })
+            }else{
+                state_exchange_data_instance.curr_week_total += currWeek.share_quantity
+                state_exchange_data_instance.total_delta += currWeek.share_quantity
+                await state_exchange_data_instance.save();
+            }   
+        }
+
+        return res.status(200).json({message:"State Wise share exchange information is calulated successfully.",success:true})
+    } catch (error) {
+        return res.status(500).json({message:error.message,success:false})
+    }
+};
+
+const country_wise_exchange = async(req,res)=>{
+
+    try {
+        const prevWeekData = await PrevShareData.findAll();
+        const currWeekData = await CurrShareData.findAll();
+
+        for(const prevWeek of prevWeekData){
+            const user = prevWeek.share_owners[0]
+            const country = user.country
+            const country_exchange_data_instance = await CountryExchangeData.findOne({
+                where: {country},
+            });
+            if(country_exchange_data_instance==null){
+                await CountryExchangeData.create({
+                    country_name: state,
+                    prev_week_total: prevWeek.share_quantity,
+                    curr_week_total: 0,
+                    total_delta: -prevWeek.share_quantity
+                })
+            }else{
+                country_exchange_data_instance.prev_week_total += prevWeek.share_quantity
+                country_exchange_data_instance.total_delta -= prevWeek.share_quantity
+                await country_exchange_data_instance.save();
+            }   
+        }
+
+        for(const currWeek of currWeekData){
+            const user = currWeek.share_owners[0]
+            const state = user.state
+            const country_exchange_data_instance = await CountryExchangeData.findOne({
+                where: {country},
+            });
+            if(country_exchange_data_instance==null){
+                await CountryExchangeData.create({
+                    country_name: state,
+                    prev_week_total: 0,
+                    curr_week_total: currWeek.share_quantity,
+                    total_delta: currWeek.share_quantity
+                })
+            }else{
+                country_exchange_data_instance.curr_week_total += currWeek.share_quantity
+                country_exchange_data_instance.total_delta += currWeek.share_quantity
+                await country_exchange_data_instance.save();
+            }   
+        }
+
+        return res.status(200).json({message:"Country Wise share exchange information is calulated successfully.",success:true})
+    } catch (error) {
+        return res.status(500).json({message:error.message,success:false})
+    }
+};
+
 
 module.exports = {
     upload_formalise_and_populate_new_data,
@@ -415,4 +559,7 @@ module.exports = {
     move_curr_to_prev,
     calculate_share_exchange,
     calculate_all_user_portfolio,
+    city_wise_exchange,
+    state_wise_exchange,
+    country_wise_exchange
 }
